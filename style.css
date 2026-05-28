@@ -1,0 +1,424 @@
+:root {
+    --bg-deep: #05020a;
+    --gold-primary: #d4af37;
+    --gold-light: #f9f1cc;
+    --danger-accent: #ff2a55;
+    --casino-green: radial-gradient(circle at center, #11331e 0%, #030d07 100%);
+    --glass-border: rgba(212, 175, 55, 0.3);
+    --font-main: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', sans-serif;
+    --safe-bottom: env(safe-area-inset-bottom, 20px);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    touch-action: manipulation;
+}
+
+body {
+    background: var(--bg-deep);
+    color: #fff;
+    font-family: var(--font-main);
+    min-height: 100vh;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    padding: 15px 15px calc(var(--safe-bottom) + 20px);
+    gap: 15px;
+    z-index: 10;
+}
+
+.app-header {
+    text-align: center;
+    padding: 5px 0;
+    overflow: hidden;
+}
+
+.app-title {
+    font-size: min(8vw, 1.8rem);
+    white-space: nowrap;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    background: linear-gradient(to bottom, var(--gold-light), var(--gold-primary));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+}
+
+.mode-selector {
+    display: flex;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid var(--glass-border);
+    border-radius: 50px;
+    padding: 5px;
+    box-shadow: inset 0 2px 15px rgba(0,0,0,0.9);
+}
+
+.mode-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.3);
+    padding: 12px 0;
+    font-size: 0.85rem;
+    font-weight: bold;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.mode-btn.active {
+    background: linear-gradient(135deg, #2c1654, #110722);
+    color: var(--gold-primary);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.8), inset 0 0 10px rgba(212, 175, 55, 0.3);
+    border: 1px solid var(--glass-border);
+}
+
+.arena-card {
+    background: var(--casino-green);
+    border: 3px solid #6b4c16;
+    border-radius: 24px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.95), inset 0 0 60px rgba(0,0,0,0.9);
+    padding: 25px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    position: relative;
+    overflow: hidden;
+}
+
+.arena-card::before {
+    content: '';
+    position: absolute;
+    top: 12px; left: 12px; right: 12px; bottom: 12px;
+    border: 1px dashed rgba(212, 175, 55, 0.2);
+    border-radius: 14px;
+    pointer-events: none;
+}
+
+.game-view {
+    display: none;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+.game-view.active { display: flex; }
+
+/* ルーレット */
+.roulette-container {
+    position: relative;
+    width: 310px;
+    height: 310px;
+}
+canvas#rouletteCanvas {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.95), inset 0 0 40px rgba(0,0,0,1);
+    background: transparent;
+}
+
+/* スロット */
+.slot-machine {
+    width: 95%;
+    background: linear-gradient(180deg, #1a1a1a, #0a0a0a);
+    border: 8px solid #2a1b0a;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.9), inset 0 0 20px rgba(212,175,55,0.1);
+    position: relative;
+}
+.slot-display {
+    height: 140px;
+    background: linear-gradient(to bottom, #777, #fff 25%, #fff 75%, #777);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 15px 25px rgba(0,0,0,0.9);
+    border: 2px solid #000;
+}
+.slot-win-line {
+    position: absolute;
+    top: 50%; left: 0; width: 100%; height: 3px;
+    background: rgba(255, 0, 0, 0.5);
+    box-shadow: 0 0 10px red;
+    z-index: 10;
+    transform: translateY(-50%);
+}
+.slot-reels-wrapper {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+.slot-reel-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background: repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(0,0,0,0.02) 10px, rgba(0,0,0,0.02) 20px);
+}
+.slot-reel-container:not(:last-child) {
+    border-right: 4px solid #222;
+}
+.slot-reel {
+    position: absolute;
+    top: 0; width: 100%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    will-change: transform;
+}
+.slot-item {
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #111;
+    font-size: 4.5rem;
+    font-weight: 900;
+    font-family: 'Impact', sans-serif;
+    text-shadow: 1px 2px 0 rgba(255,255,255,0.9), 0 6px 10px rgba(0,0,0,0.4);
+}
+
+/* カード */
+.card-table {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1200px;
+    min-height: 250px;
+    position: relative;
+    width: 100%;
+}
+.poker-card {
+    width: 90px;
+    height: 135px;
+    position: absolute;
+    transform-style: preserve-3d;
+    box-shadow: -6px 8px 20px rgba(0,0,0,0.7);
+    border-radius: 8px;
+    will-change: transform, left, top;
+}
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.card-back {
+    background: repeating-linear-gradient(135deg, #4a0d14, #4a0d14 10px, #2d060b 10px, #2d060b 20px);
+    border: 5px solid #eaeaea;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+}
+.card-front {
+    background: linear-gradient(135deg, #fff, #e0e0e0);
+    color: #111;
+    transform: rotateY(180deg);
+    border: 4px solid #d4af37;
+    box-shadow: inset 0 0 20px rgba(212,175,55,0.5);
+    font-family: 'Impact', sans-serif;
+    font-size: 3.5rem;
+    text-shadow: 2px 3px 6px rgba(0,0,0,0.3);
+}
+.card-front::before {
+    content: 'No.';
+    position: absolute;
+    top: 10px; left: 10px;
+    font-size: 0.8rem;
+    color: var(--gold-primary);
+}
+
+/* ボタン */
+.btn-spin {
+    margin-top: 25px;
+    width: 90%;
+    padding: 18px;
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #111;
+    background: linear-gradient(to bottom, #ffeba1, var(--gold-primary) 80%, #aa8010);
+    border: 2px solid #554000;
+    border-radius: 12px;
+    box-shadow: 0 8px 0 #735900, 0 15px 30px rgba(0,0,0,0.8), inset 0 2px 5px rgba(255,255,255,0.5);
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    transition: all 0.1s;
+    z-index: 10;
+}
+.btn-spin:active {
+    transform: translateY(8px);
+    box-shadow: 0 0 0 #735900, 0 5px 10px rgba(0,0,0,0.8), inset 0 2px 5px rgba(255,255,255,0.5);
+}
+.btn-spin.spinning {
+    background: linear-gradient(to bottom, #ff4d4d, #b30000 80%, #660000);
+    color: #fff;
+    border-color: #400;
+    box-shadow: 0 8px 0 #4d0000, inset 0 2px 5px rgba(255,255,255,0.3);
+    pointer-events: none;
+}
+
+/* 候補リスト */
+.control-panel {
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 16px;
+    padding: 15px;
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+}
+.input-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+.item-input {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(212,175,55,0.5);
+    color: #fff;
+    padding: 12px 15px;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: opacity 0.3s;
+}
+.btn-add {
+    background: rgba(212,175,55,0.1);
+    border: 1px solid var(--glass-border);
+    color: var(--gold-primary);
+    width: 50px;
+    border-radius: 8px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+.list-container {
+    max-height: 160px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: opacity 0.3s;
+    padding-right: 5px;
+}
+.list-container::-webkit-scrollbar { width: 4px; }
+.list-container::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.3); border-radius: 4px; }
+
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(0,0,0,0.5));
+    padding: 10px 15px;
+    border-radius: 6px;
+    border-left: 3px solid var(--gold-primary);
+}
+.list-item-num {
+    color: var(--gold-primary);
+    font-weight: 900;
+    margin-right: 12px;
+    font-family: 'Impact', sans-serif;
+    font-size: 1.1rem;
+}
+.item-text {
+    flex: 1;
+    font-size: 0.95rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.btn-delete {
+    background: none;
+    border: none;
+    color: var(--danger-accent);
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+.list-container.disabled { pointer-events: none; opacity: 0.5; }
+
+/* 結果オーバーレイ */
+.result-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    backdrop-filter: blur(8px);
+}
+.result-box {
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    transform: scale(0.5);
+}
+.result-label { 
+    color: var(--gold-light); 
+    font-size: 1.3rem; 
+    letter-spacing: 0.3em; 
+    margin-bottom: 15px; 
+    font-weight: 900;
+    text-shadow: 0 0 15px var(--gold-primary);
+}
+.result-text-wrap {
+    background: linear-gradient(180deg, #1a0b0b, #050202);
+    border: 4px solid var(--gold-primary);
+    padding: 40px 20px;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.9), inset 0 0 40px rgba(0,0,0,1);
+    margin-bottom: 30px;
+    position: relative;
+}
+.result-text-wrap::after {
+    content: ''; position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px;
+    border: 1px dashed rgba(212,175,55,0.4); pointer-events: none;
+}
+.result-text { 
+    font-size: 2.2rem; 
+    font-weight: 900; 
+    color: #fff; 
+    line-height: 1.3; 
+    word-break: break-word; 
+    text-shadow: 0 5px 15px rgba(0,0,0,0.9); 
+}
+.result-number-badge {
+    font-family: 'Impact', sans-serif;
+    font-size: 1.8rem;
+    color: var(--gold-primary);
+    margin-bottom: 10px;
+    letter-spacing: 0.1em;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+}
+.btn-close { 
+    width: 100%; 
+    padding: 18px; 
+    background: linear-gradient(to bottom, #333, #111); 
+    border: 2px solid var(--gold-primary); 
+    color: var(--gold-primary); 
+    border-radius: 12px; 
+    font-weight: 900; 
+    cursor: pointer; 
+    letter-spacing: 0.1em;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+}
+canvas#fxCanvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 101; }

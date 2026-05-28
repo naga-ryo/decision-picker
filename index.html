@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>THE GRAND DECISION</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"></script>
+</head>
+<body>
+    <canvas id="fxCanvas"></canvas>
+
+    <div class="app-container">
+        <header class="app-header">
+            <div class="app-title">DECISION CASINO</div>
+        </header>
+
+        <div class="mode-selector">
+            <button class="mode-btn active" data-mode="roulette">Roulette</button>
+            <button class="mode-btn" data-mode="slot">Slot</button>
+            <button class="mode-btn" data-mode="card">Card</button>
+        </div>
+
+        <div class="arena-card">
+            <div id="view-roulette" class="game-view active">
+                <div class="roulette-container">
+                    <canvas id="rouletteCanvas" width="600" height="600"></canvas>
+                </div>
+            </div>
+
+            <div id="view-slot" class="game-view">
+                <div class="slot-machine">
+                    <div class="slot-display" id="slotDisplay">
+                        <div class="slot-win-line"></div>
+                        <div class="slot-reels-wrapper">
+                            <div class="slot-reel-container"><div class="slot-reel" id="slotReel1"></div></div>
+                            <div class="slot-reel-container"><div class="slot-reel" id="slotReel2"></div></div>
+                            <div class="slot-reel-container"><div class="slot-reel" id="slotReel3"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-card" class="game-view">
+                <div class="card-table" id="cardTable"></div>
+            </div>
+
+            <button id="btnSpin" class="btn-spin">PLACE YOUR BETS</button>
+        </div>
+
+        <div class="control-panel">
+            <div class="input-row">
+                <input type="text" id="itemInput" class="item-input" placeholder="候補を追加..." maxlength="30">
+                <button id="btnAdd" class="btn-add">+</button>
+            </div>
+            <div id="poolList" class="list-container"></div>
+        </div>
+    </div>
+
+    <div class="result-overlay" id="resultOverlay">
+        <div class="result-box" id="resultBox">
+            <div class="result-label" id="resultLabel">WINNING RESULT</div>
+            <div class="result-text-wrap">
+                <div class="result-number-badge" id="resultNum">---</div>
+                <div class="result-text" id="resultText">---</div>
+            </div>
+            <button class="btn-close" id="btnClose">COLLECT PAYOUT</button>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
