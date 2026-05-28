@@ -50,11 +50,19 @@
         </div>
 
         <div class="control-panel">
+            <button id="btnOpenEdit" class="btn-edit-open">選択肢を編集</button>
+        </div>
+    </div>
+
+    <div class="edit-modal-overlay" id="editModalOverlay">
+        <div class="edit-modal-box">
+            <div class="edit-modal-title">OPTIONS</div>
             <div class="input-row">
                 <input type="text" id="itemInput" class="item-input" placeholder="候補を追加..." maxlength="30">
                 <button id="btnAdd" class="btn-add">+</button>
             </div>
             <div id="poolList" class="list-container"></div>
+            <button class="btn-close-modal" id="btnCloseEdit">完了</button>
         </div>
     </div>
 

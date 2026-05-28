@@ -23,6 +23,9 @@
         modeBtns: document.querySelectorAll('.mode-btn'),
         views: document.querySelectorAll('.game-view'),
         btnSpin: document.getElementById('btnSpin'),
+        btnOpenEdit: document.getElementById('btnOpenEdit'),
+        editModalOverlay: document.getElementById('editModalOverlay'),
+        btnCloseEdit: document.getElementById('btnCloseEdit'),
         itemInput: document.getElementById('itemInput'),
         btnAdd: document.getElementById('btnAdd'),
         poolList: document.getElementById('poolList'),
@@ -63,7 +66,6 @@
         updateActiveGameView();
     };
 
-    // XSS対策
     const escapeHTML = (str) => str.replace(/[&<>'"]/g, t => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[t]));
 
     const switchMode = (mode) => {
@@ -623,21 +625,13 @@
     };
 
     const spin = () => {
-        // 編集中にスピンが押されたら強制的にフォーカスを外す
-        if (document.activeElement && document.activeElement.classList.contains('item-text')) {
-            document.activeElement.blur();
-        }
-
         if (state.isSpinning || state.items.length === 0) return;
         state.isSpinning = true;
         
         ui.btnSpin.textContent = 'LOCKED';
         ui.btnSpin.classList.add('spinning');
-        ui.itemInput.disabled = true;
-        ui.itemInput.style.opacity = '0.5';
-        ui.btnAdd.disabled = true;
-        ui.btnAdd.style.opacity = '0.5';
-        ui.poolList.classList.add('disabled');
+        ui.btnOpenEdit.disabled = true;
+        ui.btnOpenEdit.style.opacity = '0.5';
 
         if (state.currentMode === 'roulette') {
             startRoulettePhysics();
@@ -674,11 +668,8 @@
             
             ui.btnSpin.textContent = 'START GAME';
             ui.btnSpin.classList.remove('spinning');
-            ui.itemInput.disabled = false;
-            ui.itemInput.style.opacity = '1';
-            ui.btnAdd.disabled = false;
-            ui.btnAdd.style.opacity = '1';
-            ui.poolList.classList.remove('disabled');
+            ui.btnOpenEdit.disabled = false;
+            ui.btnOpenEdit.style.opacity = '1';
             
             gsap.set('.slot-display', { boxShadow: 'inset 0 15px 25px rgba(0,0,0,0.9)' });
             
@@ -690,9 +681,29 @@
         ui.modeBtns.forEach(btn => btn.addEventListener('click', (e) => {
             if (!state.isSpinning) switchMode(e.target.dataset.mode);
         }));
+
         ui.btnSpin.addEventListener('click', spin);
         ui.btnClose.addEventListener('click', hideResult);
 
+        // Edit Modal Controls
+        ui.btnOpenEdit.addEventListener('click', () => {
+            if (state.isSpinning) return;
+            ui.editModalOverlay.classList.add('show');
+        });
+
+        ui.btnCloseEdit.addEventListener('click', () => {
+            ui.editModalOverlay.classList.remove('show');
+            updateActiveGameView();
+        });
+
+        ui.editModalOverlay.addEventListener('click', (e) => {
+            if (e.target === ui.editModalOverlay) {
+                ui.editModalOverlay.classList.remove('show');
+                updateActiveGameView();
+            }
+        });
+
+        // Item Management
         ui.btnAdd.addEventListener('click', () => {
             if (state.isSpinning) return;
             const val = ui.itemInput.value.trim();
@@ -704,7 +715,6 @@
         });
         ui.itemInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') ui.btnAdd.click(); });
         
-        // リストのクリックイベント（削除と編集）
         ui.poolList.addEventListener('click', (e) => {
             if (state.isSpinning) return;
             
@@ -712,33 +722,31 @@
                 state.items.splice(e.target.dataset.idx, 1);
                 renderLists();
             } else if (e.target.classList.contains('item-text')) {
-                // 直接編集モードへ
                 const el = e.target;
                 el.contentEditable = true;
                 el.focus();
                 
-                // テキストを全選択
                 const selection = window.getSelection();
                 const range = document.createRange();
                 range.selectNodeContents(el);
                 selection.removeAllRanges();
                 selection.addRange(range);
                 
-                // フォーカスが外れたら保存
                 el.onblur = () => {
                     el.contentEditable = false;
-                    let newVal = el.textContent.trim();
-                    const idx = el.dataset.idx;
-                    if (newVal) {
-                        if (newVal.length > 30) newVal = newVal.substring(0, 30);
-                        state.items[idx] = newVal;
-                    } else {
-                        state.items.splice(idx, 1);
-                    }
-                    renderLists();
+                    setTimeout(() => {
+                        let newVal = el.textContent.trim();
+                        const idx = el.dataset.idx;
+                        if (newVal) {
+                            if (newVal.length > 30) newVal = newVal.substring(0, 30);
+                            state.items[idx] = newVal;
+                        } else {
+                            state.items.splice(idx, 1);
+                        }
+                        renderLists();
+                    }, 100);
                 };
                 
-                // エンターキーで保存
                 el.onkeydown = (ev) => {
                     if (ev.key === 'Enter') {
                         ev.preventDefault();
