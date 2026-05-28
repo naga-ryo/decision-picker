@@ -631,7 +631,7 @@
         if (state.isSpinning || state.items.length === 0) return;
         state.isSpinning = true;
         
-        ui.btnSpin.textContent = 'NO MORE BETS';
+        ui.btnSpin.textContent = 'LOCKED';
         ui.btnSpin.classList.add('spinning');
         ui.itemInput.disabled = true;
         ui.itemInput.style.opacity = '0.5';
@@ -672,7 +672,7 @@
             ui.overlay.style.pointerEvents = 'none';
             state.isSpinning = false;
             
-            ui.btnSpin.textContent = 'PLACE YOUR BETS';
+            ui.btnSpin.textContent = 'START GAME';
             ui.btnSpin.classList.remove('spinning');
             ui.itemInput.disabled = false;
             ui.itemInput.style.opacity = '1';

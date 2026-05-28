@@ -3,7 +3,7 @@
     --gold-primary: #d4af37;
     --gold-light: #f9f1cc;
     --danger-accent: #ff2a55;
-    --casino-green: radial-gradient(circle at center, #11331e 0%, #030d07 100%);
+    --casino-green: radial-gradient(circle at center, #153d24 0%, #05140a 100%);
     --glass-border: rgba(212, 175, 55, 0.3);
     --font-main: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', sans-serif;
     --safe-bottom: env(safe-area-inset-bottom, 20px);
@@ -50,15 +50,16 @@ body {
     font-weight: 900;
     letter-spacing: 0.15em;
     background: linear-gradient(to bottom, var(--gold-light), var(--gold-primary));
+    color: var(--gold-light);
+    text-shadow: 0 0 15px var(--gold-primary), 0 5px 5px rgba(0,0,0,0.8);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
 }
 
 .mode-selector {
     display: flex;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.6);
     border: 1px solid var(--glass-border);
     border-radius: 50px;
     padding: 5px;
@@ -69,7 +70,7 @@ body {
     flex: 1;
     background: transparent;
     border: none;
-    color: rgba(255, 255, 255, 0.3);
+    color: #8c8c8c;
     padding: 12px 0;
     font-size: 0.85rem;
     font-weight: bold;
@@ -79,10 +80,10 @@ body {
 }
 
 .mode-btn.active {
-    background: linear-gradient(135deg, #2c1654, #110722);
-    color: var(--gold-primary);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.8), inset 0 0 10px rgba(212, 175, 55, 0.3);
-    border: 1px solid var(--glass-border);
+    background: linear-gradient(135deg, #4d3712, #2e1e05);
+    color: var(--gold-light);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    border: 1px solid rgba(217, 179, 64, 0.5);
 }
 
 .arena-card {
@@ -136,7 +137,7 @@ canvas#rouletteCanvas {
 /* スロット */
 .slot-machine {
     width: 95%;
-    background: linear-gradient(180deg, #1a1a1a, #0a0a0a);
+    background: radial-gradient(circle, #1a1a1a, #2a1b0a);
     border: 8px solid #2a1b0a;
     border-radius: 12px;
     padding: 15px;
@@ -224,7 +225,7 @@ canvas#rouletteCanvas {
     justify-content: center;
 }
 .card-back {
-    background: repeating-linear-gradient(135deg, #4a0d14, #4a0d14 10px, #2d060b 10px, #2d060b 20px);
+    background: repeating-linear-gradient(45deg, #940000, #940000 5px, #6b0000 5px, #6b0000 10px);
     border: 5px solid #eaeaea;
     box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
 }
@@ -254,7 +255,7 @@ canvas#rouletteCanvas {
     font-size: 1.4rem;
     font-weight: 900;
     color: #111;
-    background: linear-gradient(to bottom, #ffeba1, var(--gold-primary) 80%, #aa8010);
+    background: linear-gradient(180deg, #d9b340, #b38c2b);
     border: 2px solid #554000;
     border-radius: 12px;
     box-shadow: 0 8px 0 #735900, 0 15px 30px rgba(0,0,0,0.8), inset 0 2px 5px rgba(255,255,255,0.5);
@@ -422,3 +423,23 @@ canvas#rouletteCanvas {
     box-shadow: 0 10px 20px rgba(0,0,0,0.6);
 }
 canvas#fxCanvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 101; }
+
+/* =========================================
+   色と影のみの上書き（既存のstyle.cssの一番下に追記してください）
+   ※レイアウトや形状に関するプロパティは一切含んでいません
+========================================= */
+
+
+/* 結果表示画面 */
+
+.result-text-wrap::after {
+    border-color: rgba(217, 179, 64, 0.4);
+}
+.result-number-badge {
+    background: var(--gold-primary);
+    color: #141414;
+}
+.btn-close {
+    background: #ffffff;
+    color: #141414;
+}
