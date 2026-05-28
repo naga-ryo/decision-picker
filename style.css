@@ -311,7 +311,7 @@ canvas#rouletteCanvas {
     transition: opacity 0.3s;
 }
 .list-container {
-    max-height: 250px;
+    height: 30dvh;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
