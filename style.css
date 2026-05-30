@@ -506,3 +506,27 @@ canvas#fxCanvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
 .btn-close-modal:hover {
     background: #3a3a3a;
 }
+
+/* =========================================
+   法的注意書き・免責事項のスタイル
+========================================= */
+.legal-notice {
+    margin-top: 10px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 0.65rem;
+    line-height: 1.5;
+    text-align: justify;
+}
+.legal-notice p {
+    margin-bottom: 8px;
+}
+.legal-notice p:last-child {
+    margin-bottom: 0;
+}
+.legal-notice strong {
+    color: rgba(255, 255, 255, 0.6);
+}
