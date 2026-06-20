@@ -46,9 +46,72 @@
 
     const init = () => {
         renderLists();
-        switchMode(state.currentMode);
+        drawLogo('logoCanvasLeft');
+        drawLogo('logoCanvasRight');
         bindEvents();
         gsap.ticker.add(physicsLoop);
+    };
+
+// ==========================================
+    // Logo Rendering
+    // ==========================================
+    const drawLogo = (canvasId) => {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const cx = 35;
+        const cy = 35;
+        const radius = 32;
+
+        ctx.clearRect(0, 0, 70, 70);
+
+        // チップベース
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+        ctx.fillStyle = '#1c1405';
+        ctx.strokeStyle = '#d4af37';
+        ctx.lineWidth = 3;
+        ctx.fill();
+        ctx.stroke();
+
+        // 外側のダッシュ模様
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.strokeStyle = '#d4af37';
+        ctx.lineWidth = 2;
+        for (let i = 0; i < 12; i++) {
+            ctx.rotate((Math.PI * 2) / 12);
+            ctx.beginPath();
+            ctx.moveTo(radius - 6, 0);
+            ctx.lineTo(radius - 2, 0);
+            ctx.stroke();
+        }
+        ctx.restore();
+
+        // 内円
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius - 10, 0, Math.PI * 2);
+        ctx.fillStyle = '#2d060b';
+        ctx.strokeStyle = '#fff3ce';
+        ctx.lineWidth = 2;
+        ctx.fill();
+        ctx.stroke();
+
+        // 意思決定のクロス矢印
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.fillStyle = '#fff3ce';
+        for (let i = 0; i < 4; i++) {
+            ctx.rotate(Math.PI / 2);
+            ctx.beginPath();
+            ctx.moveTo(0, -3);
+            ctx.lineTo(14, 0);
+            ctx.lineTo(0, 3);
+            ctx.lineTo(2, 0);
+            ctx.closePath();
+            ctx.fill();
+        }
+        ctx.restore();
     };
 
     const renderLists = () => {
