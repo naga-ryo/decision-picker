@@ -38,6 +38,12 @@ body {
     z-index: 10;
 }
 
+.app-header {
+    text-align: center;
+    padding: 5px 0;
+    overflow: hidden;
+}
+
 .app-title {
     font-size: min(8vw, 1.8rem);
     white-space: nowrap;
@@ -523,22 +529,4 @@ canvas#fxCanvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
 }
 .legal-notice strong {
     color: rgba(255, 255, 255, 0.6);
-}
-
-/* =========================================
-   ロゴ・ヘッダー
-========================================= */
-.app-header {
-    display: flex;
-    align-items: center;
-    justify-content: center; 
-    gap: 12px;
-    padding: 15px 0;
-    min-height: 60px;
-}
-
-.logo-canvas {
-    width: 44px;
-    height: 44px;
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.8));
 }
